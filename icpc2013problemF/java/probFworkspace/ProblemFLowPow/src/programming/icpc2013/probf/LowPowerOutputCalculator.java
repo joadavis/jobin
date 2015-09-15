@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 public class LowPowerOutputCalculator {
 
+	private final static Logger log = Logger.getLogger(LowPowerOutputCalculator.class.getName());
+	
 	/**
 	 * Read two lines from standard input and write back out a result
 	 */
@@ -19,6 +22,7 @@ public class LowPowerOutputCalculator {
 		
 		// make prompts optional, as problem description does not call for them
 		boolean showPrompts = true;
+		log.fine("Starting command prompt processing");
 		
 		if (showPrompts) {
 			System.out.println("Please enter number of machines and number of batteries per machine (ie \"2 4\"):");
@@ -27,7 +31,7 @@ public class LowPowerOutputCalculator {
 		while ((nandkString = in.readLine()) != null) {
 			nandkString = nandkString.trim();
 			if (nandkString.isEmpty() || nandkString.equals("quit")) {
-				System.out.println("All Done.");
+				log.info("All Done.");
 				break;
 			}
 

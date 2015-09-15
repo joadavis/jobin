@@ -1,5 +1,7 @@
 package programming.icpc2013.probf;
 
+import java.util.logging.Logger;
+
 /**
  * Class for representing each Machine and operations we want on it
  * Each Machine has two chips and each chip can be assigned k batteries
@@ -9,7 +11,8 @@ package programming.icpc2013.probf;
  *
  */
 public class TwoChipMachine {
-
+	private final static Logger log = Logger.getLogger(TwoChipMachine.class.getName());
+	
 	private int chipAbatt1;
 	private int chipBbatt1;
 	private int k; // total number of batteries needed per chip
@@ -31,7 +34,7 @@ public class TwoChipMachine {
 		this.k = k;
 		
 		this.d = chipBbatt1 - chipAbatt1; // knowing we have sorted the list, then B > A
-		System.out.println("B " + chipBbatt1 + " - A " + chipAbatt1 + " = " + this.d);
+		log.finer("B " + chipBbatt1 + " - A " + chipAbatt1 + " = " + this.d);
 		
 		this.remainingBattSlots = k * 2 - 2;  // number of batts per chip x 2 chips - the two batts provided
 	}

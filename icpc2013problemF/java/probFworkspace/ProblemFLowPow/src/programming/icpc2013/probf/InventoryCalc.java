@@ -2,6 +2,7 @@ package programming.icpc2013.probf;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -13,6 +14,7 @@ import java.util.stream.IntStream;
  *
  */
 public class InventoryCalc {
+	private final static Logger log = Logger.getLogger(InventoryCalc.class.getName());
 
 	int n, k;
 	List<Integer> remainingBatts;
@@ -54,7 +56,7 @@ public class InventoryCalc {
 		machines = new ArrayList<TwoChipMachine>(n);
 
 		// pick the first two sorted batts for the first machine
-		System.out.println(remainingBatts.get(0));
+		log.finest(String.valueOf(remainingBatts.get(0)));
 		TwoChipMachine firstMach = new TwoChipMachine(remainingBatts.get(0), remainingBatts.get(1), k);
 		remainingBatts.remove(1); // remove the higher number first so it
 									// doesn't become 0
@@ -63,29 +65,17 @@ public class InventoryCalc {
 		machines.add(firstMach);
 		availableSlots = firstMach.getRemainingBattSlots();
 
-		System.out.println("Available Slots: " + availableSlots);
+		log.fine("Available Slots: " + availableSlots);
 
 		// int worstD = 1000000000 + 1; // worse than the allowed range of
 		// values
 		int worstD = firstMach.getD();
 
 		while (machines.size() < n) {
-			System.out.println("worst " + worstD + " of " + machines.size());
-			for (TwoChipMachine m : machines) {
-				System.out.println(m.toString());
-			}
-			// machines.forEach(toString());
-
-			// broken impl just to exercise test cases
-			/*
-			 * Machine junk = new Machine(remainingBatts.get(0),
-			 * remainingBatts.get(1), k); remainingBatts.remove(1); // remove
-			 * the higher number first so it doesn't become 0
-			 * remainingBatts.remove(0); machines.add(junk);
-			 * 
-			 * if (junk.getD() > worstD) worstD = junk.getD();
-			 * 
-			 */
+			log.fine("worst " + worstD + " of " + machines.size());
+			//for (TwoChipMachine m : machines) {
+			//	log.fine(m.toString());
+			//}
 
 			// inline solution
 			// lowest d will be between pairs of batteries adjacent in sorted
@@ -93,8 +83,7 @@ public class InventoryCalc {
 			int workingD = 1000000001;
 
 			// determine number of available slots for hiding - numHidingSlots
-			// int numHidingSlots = machines.stream().mapToInt(m ->
-			// m.getD()).sum();
+			// int numHidingSlots = machines.stream().mapToInt(m -> m.getD()).sum();
 			// its a shame, that was kind of elegant. But there is a simpler way
 
 			int workingIndex = 0;
@@ -109,14 +98,10 @@ public class InventoryCalc {
 			}
 
 			// hide up to the best index
-			// for (int h = 0; h < workingIndex; h++) {
-			//   realized at this point could just track the number of available
-			//   slots external to the machines
-			//   rather than searching through the list of machines
-			// }
+			// by claiming the available slots needed
 			availableSlots = availableSlots - workingIndex;
 
-			System.out.println("Skipped " + workingIndex + " = " + remainingBatts.subList(0, workingIndex)
+			log.fine("Skipped " + workingIndex + " = " + remainingBatts.subList(0, workingIndex)
 					+ ", Available Slots: " + availableSlots);
 
 			TwoChipMachine workingMachine = new TwoChipMachine(remainingBatts.get(workingIndex),
@@ -125,30 +110,24 @@ public class InventoryCalc {
 			remainingBatts = remainingBatts.subList(workingIndex + 2, remainingBatts.size());
 			machines.add(workingMachine);
 			// new capacity coming online
-			availableSlots = availableSlots + workingMachine.getRemainingBattSlots(); 
+			availableSlots = availableSlots + workingMachine.getRemainingBattSlots();
 
-			System.out.println("Available Slots: " + availableSlots);
+			log.fine("Available Slots: " + availableSlots);
 
 			if (workingMachine.getD() > worstD)
 				worstD = workingMachine.getD();
 		}
 
 		// Sanity check, should be no leftovers
-		System.out.println("Final batch " + availableSlots + " = " + remainingBatts.size());
+		log.fine("Final batch " + availableSlots + " = " + remainingBatts.size());
 
-		System.out.println("Final worst " + worstD + " of " + machines.size());
+		log.fine("Final worst " + worstD + " of " + machines.size());
 		for (TwoChipMachine m : machines) {
-			System.out.println(m.toString());
+			log.fine(m.toString());
 		}
 
 		// the final answer
 		return worstD;
 	}
 
-	/**
-	 * helper method - turn String of space separated values into ArrayList
-	 * <Integer>
-	 * 
-	 */
-	// public ArrayList
 }
